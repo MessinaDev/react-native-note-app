@@ -9,6 +9,10 @@ export default function HomeScreen({ navigation }) {
   const [noteSelected, setNodeSelected] = React.useState(null);
   const notes = useSelector((state) => state.note.notes);
 
+  function editNote(note) {
+    navigation.navigate("Note", { note });
+  }
+
   const showDialog = (note) => setNodeSelected(note);
   const hideDialog = () => setNodeSelected(null);
   function delNote(id) {
@@ -22,16 +26,21 @@ export default function HomeScreen({ navigation }) {
   }, [dispatch]);
 
   const cards =
-    notes.map((n) => {
+    notes.map((note) => {
       return (
-        <Card style={styles.card} onLongPress={() => showDialog(n)}>
-          <Card.Title title={n.title} />
+        <Card
+          key={note.id}
+          style={styles.card}
+          onPress={() => editNote(note)}
+          onLongPress={() => showDialog(note)}
+        >
+          <Card.Title title={note.title} />
           <Card.Content>
-            <Text>{n.text}</Text>
+            <Text>{note.text}</Text>
           </Card.Content>
           <Card.Actions>
-            <FAB icon="delete" size="small" onPress={() => showDialog(n)} />
-            <FAB icon="pencil" size="small" onPress={() => alert("edit")} />
+            <FAB icon="delete" size="small" onPress={() => showDialog(note)} />
+            <FAB icon="pencil" size="small" onPress={() => editNote(note)} />
           </Card.Actions>
         </Card>
       );

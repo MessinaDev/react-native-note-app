@@ -28,7 +28,7 @@ export const deleteNote = createAsyncThunk("note/deleteNote", async (id) => {
 
 export const editNote = createAsyncThunk("note/editNote", async (note) => {
   const notes = await getData();
-  const index = getIndexByID(notes, id);
+  const index = getIndexByID(notes, note.id);
   notes[index] = note;
   await storeData(notes);
 

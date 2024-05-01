@@ -1,25 +1,31 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FAB, TextInput } from "react-native-paper";
-import { addNote } from "../Store/noteSlice";
+import { addNote, editNote } from "../Store/noteSlice";
 import { useDispatch } from "react-redux";
 
-export default function AddScreen({ navigation }) {
-  const [title, setTitle] = React.useState("");
-  const [text, setText] = React.useState("");
+export default function DetailsNote({ navigation, route }) {
+  const note = { ...route.params?.note };
+  const [title, setTitle] = React.useState(note?.title || "");
+  const [text, setText] = React.useState(note?.text || "");
 
   const dispatch = useDispatch();
 
-  function add() {
+  function save() {
     if (title && text) {
-      const n = createNewNote();
-      dispatch(addNote(n));
+      if (note?.id) {
+        note.title = title;
+        note.text = text;
+        dispatch(editNote(note));
+      } else {
+        const n = createNewNote();
+        dispatch(addNote(n));
+      }
       setTitle("");
       setText("");
       navigation.navigate("Home");
     }
   }
-
   function createNewNote() {
     return {
       id: null,
@@ -54,7 +60,7 @@ export default function AddScreen({ navigation }) {
           bottom: 20,
         }}
       >
-        <FAB icon="content-save" onPress={() => add()} />
+        <FAB icon="content-save" onPress={() => save()} />
       </TouchableOpacity>
     </View>
   );
