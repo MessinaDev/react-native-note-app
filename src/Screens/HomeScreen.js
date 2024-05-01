@@ -6,18 +6,11 @@ import { deleteNote, fetchNotes } from "../Store/noteSlice";
 import { useEffect } from "react";
 
 export default function HomeScreen({ navigation }) {
-  const [visible, setVisible] = React.useState(false);
   const [noteSelected, setNodeSelected] = React.useState(null);
   const notes = useSelector((state) => state.note.notes);
 
-  function showDialog(note) {
-    setNodeSelected(note);
-    setVisible(true);
-  }
-  function hideDialog() {
-    setNodeSelected(null);
-    setVisible(false);
-  }
+  const showDialog = (note) => setNodeSelected(note);
+  const hideDialog = () => setNodeSelected(null);
   function delNote(id) {
     dispatch(deleteNote(id));
     hideDialog();
@@ -50,7 +43,7 @@ export default function HomeScreen({ navigation }) {
 
       <Portal>
         <Dialog
-          visible={visible}
+          visible={noteSelected}
           dismissable={false}
           dismissableBackButton={false}
         >
