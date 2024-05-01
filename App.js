@@ -1,5 +1,5 @@
 import HomeScreen from "./src/Screens/HomeScreen";
-import AddScreen from "./src/Screens/AddScreen";
+import DetailsNote from "./src/Screens/DetailsNote";
 import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { PaperProvider, MD3DarkTheme } from "react-native-paper";
@@ -17,8 +17,8 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen
               name="Note"
-              component={AddScreen}
-              options={{ title: "New note" }}
+              component={DetailsNote}
+              options={{ title: "Note" }}
             />
           </Stack.Navigator>
         </NavigationContainer>
