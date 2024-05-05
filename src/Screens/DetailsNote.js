@@ -1,32 +1,35 @@
-import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { FAB, TextInput } from "react-native-paper";
 import { addNote, editNote } from "../Store/noteSlice";
 import { useDispatch } from "react-redux";
 import DropDown from "react-native-paper-dropdown";
 
+const categories = [
+  {
+    label: "Work",
+    value: "work",
+  },
+  {
+    label: "Personal",
+    value: "personal",
+  },
+];
+
 export default function DetailsNote({ navigation, route }) {
   const note = { ...route.params?.note };
-  const [title, setTitle] = React.useState(note?.title || "");
-  const [text, setText] = React.useState(note?.text || "");
-  const [category, setCategory] = React.useState("");
-  const [openDropDown, setOpenDropDown] = React.useState(false);
+  const [title, setTitle] = useState(note?.title || "");
+  const [text, setText] = useState(note?.text || "");
+  const [category, setCategory] = useState(
+    note?.category || categories[0].value
+  );
+  const [openDropDown, setOpenDropDown] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const dispatch = useDispatch();
 
-  const categories = [
-    {
-      label: "Work",
-      value: "work",
-    },
-    {
-      label: "Personal",
-      value: "personal",
-    },
-  ];
-
-  function save() {
-    if (title && text) {
+  function handleSubmit() {
+    if (isFormValid()) {
       if (note?.id) {
         note.title = title;
         note.text = text;
@@ -40,6 +43,18 @@ export default function DetailsNote({ navigation, route }) {
       navigation.navigate("Home");
     }
   }
+  function isFormValid() {
+    let errors = [];
+    if (!title) {
+      errors.push("Title is required");
+    }
+    if (!text) {
+      errors.push("Text is required");
+    }
+
+    setErrors(errors);
+    return errors.length === 0;
+  }
   function createNewNote() {
     return {
       id: null,
@@ -48,6 +63,12 @@ export default function DetailsNote({ navigation, route }) {
       text,
     };
   }
+
+  const listErrors = errors.map((e, index) => (
+    <Text key={index} style={styles.error}>
+      {e}
+    </Text>
+  ));
 
   return (
     <View style={styles.container}>
@@ -77,6 +98,8 @@ export default function DetailsNote({ navigation, route }) {
         style={{ marginTop: 10 }}
       ></TextInput>
 
+      <View style={styles.containerErrors}>{listErrors}</View>
+
       <TouchableOpacity
         style={{
           position: "absolute",
@@ -84,7 +107,7 @@ export default function DetailsNote({ navigation, route }) {
           bottom: 20,
         }}
       >
-        <FAB icon="content-save" onPress={() => save()} />
+        <FAB icon="content-save" onPress={() => handleSubmit()} />
       </TouchableOpacity>
     </View>
   );
@@ -94,5 +117,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 20,
+  },
+  containerErrors: {
+    marginTop: 20,
+  },
+  error: {
+    color: "red",
+    fontSize: 20,
+    marginBottom: 10,
   },
 });
