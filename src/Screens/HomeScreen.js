@@ -38,7 +38,7 @@ export default function HomeScreen({ navigation }) {
         >
           <Card.Title
             title={note.title}
-            subtitle={`${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`}
+            subtitle={`Creation date: ${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`}
           />
           <Card.Content>
             <Text>{note.text}</Text>

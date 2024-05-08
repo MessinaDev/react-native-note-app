@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import { FAB, TextInput } from "react-native-paper";
+import { FAB, TextInput, Text } from "react-native-paper";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { addNote, editNote } from "../Store/noteSlice";
 import { useDispatch } from "react-redux";
 import DropDown from "react-native-paper-dropdown";
@@ -97,6 +97,12 @@ export default function DetailsNote({ navigation, route }) {
         onChangeText={(text) => setText(text)}
         style={{ marginTop: 10 }}
       ></TextInput>
+      <Text style={styles.info} variant="labelLarge">
+        Creation date:
+        {`${new Date(note?.date).toLocaleDateString()} - ${new Date(
+          note?.date
+        ).toLocaleTimeString()}`}
+      </Text>
 
       <View style={styles.containerErrors}>{listErrors}</View>
 
@@ -120,6 +126,9 @@ const styles = StyleSheet.create({
   },
   containerErrors: {
     marginTop: 20,
+  },
+  info: {
+    marginTop: 15,
   },
   error: {
     color: "red",
