@@ -27,6 +27,8 @@ export default function HomeScreen({ navigation }) {
 
   const cards =
     notes.map((note) => {
+      const date = new Date(note.date);
+
       return (
         <Card
           key={note.id}
@@ -34,7 +36,10 @@ export default function HomeScreen({ navigation }) {
           onPress={() => editNote(note)}
           onLongPress={() => showDialog(note)}
         >
-          <Card.Title title={note.title} />
+          <Card.Title
+            title={note.title}
+            subtitle={`${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`}
+          />
           <Card.Content>
             <Text>{note.text}</Text>
           </Card.Content>
