@@ -41,7 +41,13 @@ export const noteSlice = createSlice({
     notes: [],
   },
 
-  reducers: {},
+  reducers: {
+    sort(state, action) {
+      state.notes = action.payload
+        ? ascendingSort(state.notes)
+        : descendingSort(state.notes);
+    },
+  },
 
   extraReducers: (builder) => {
     builder.addCase(fetchNotes.pending, (state) => {
@@ -99,11 +105,18 @@ async function storeData(notes) {
 async function getData() {
   try {
     const json = await AsyncStorage.getItem(nameItemStorage);
-    return JSON.parse(json) || [];
+    return descendingSort(JSON.parse(json)) || [];
   } catch (error) {
     console.error("ERROR: " + error);
     throw new Error("ERROR: " + error);
   }
+}
+
+function ascendingSort(notes) {
+  return notes.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+function descendingSort(notes) {
+  return notes.sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
 function getIndexByID(notes, id) {
@@ -114,4 +127,5 @@ function getIndexByID(notes, id) {
   return index;
 }
 
+export const { sort } = noteSlice.actions;
 export default noteSlice.reducer;
